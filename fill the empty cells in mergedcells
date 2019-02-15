@@ -1,0 +1,38 @@
+def sheethandler(sheet):
+    mergedcells = sheet.merged_cells
+
+    cols2 = sheet.col_values(1)
+
+    mergedcellsincol2=[]    # create a empty list for finding the mergedcells in column 2
+    singlecellsincol2=[]    # create a empty list for finding the no-mergedcells in column 2
+    newcell=[]              # create a empty list for storing the handled cells
+
+    for element in mergedcells:                                #find the mergedcells and not-mergedcells in column 2
+        if element[2]==1 and element[0]!=0 and element[0]!=1:
+            mergedcellsincol2.append([element[0],element[1]])
+        
+    for i in range(len(mergedcellsincol2)-1):
+        k = mergedcellsincol2[i][1]+1
+        if mergedcellsincol2[i][1] != mergedcellsincol2[i+1][0]:
+            if mergedcellsincol2[i+1][0]-mergedcellsincol2[i][1] == 1:
+                singlecellsincol2.append(k)
+            else:
+                for j in range(mergedcellsincol2[i+1][0]-mergedcellsincol2[i][1]):
+                    singlecellsincol2.append(k)
+                    k = k+1
+
+    if mergedcellsincol2[-1][1] < len(cols2)+1:
+        k = mergedcellsincol2[-1][1]+1
+        for i in range(len(cols2)-mergedcellsincol2[-1][1]):
+            singlecellsincol2.append(k)
+            k = k+1
+
+    for i in range(len(cols2)):                    # fill the empty cells that is in the mergedcells
+        if i not in singlecellsincol2 and cols2[i] == '':
+            k = cols2[i-1]
+            cols2[i] = k
+     
+     for i in range(len(cols2)):
+         newcell.append(cols2[i])
+           
+    return newcell
